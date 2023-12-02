@@ -8,17 +8,17 @@ require_once '../config/conn.php';
 // Comprobar si se ha enviado el formulario
 if (isset($_POST['submit'])) {
   // Obtener los datos del formulario
-  $name = $_POST['name'];
+  $username = $_POST['username'];
   $email = $_POST['email'];
   $password = $_POST['password'];
   $passwordConfirm = $_POST['password-confirm'];
-  $role = $_POST['role'];
+  $role_id = $_POST['role_id'];
 
   // Validar los datos del formulario
-  if (empty($name) || empty($email) || empty($password) || empty($passwordConfirm)) {
+  if (empty($username) || empty($email) || empty($password) || empty($passwordConfirm)) {
     // Alguno de los campos está vacío, muestra un mensaje de error
     $_SESSION['error'] = "Por favor, rellena todos los campos del formulario.";
-  } elseif (strlen($name) < 3) {
+  } elseif (strlen($username) < 3) {
     // El nombre de usuario es demasiado corto
     $_SESSION['error'] = "Por favor, ingresa un nombre válido.";
   } elseif (strlen($password) < 8) {
@@ -41,17 +41,17 @@ if (isset($_POST['submit'])) {
       // El correo electrónico está disponible, inserta el usuario en la base de datos
       $passwordHashed = password_hash($password, PASSWORD_DEFAULT);
 
-      $query = "INSERT INTO users (name, role, email, password) VALUES (:name, :role, :email, :password)";
+      $query = "INSERT INTO users (username, email, password, role_id) VALUES (:username, :email, :password, :role_id)";
       $stmt = $pdo->prepare($query);
-      $stmt->bindParam(':name', $name, PDO::PARAM_STR);
-      $stmt->bindParam(':role', $role, PDO::PARAM_STR);
+      $stmt->bindParam(':username', $username, PDO::PARAM_STR);
       $stmt->bindParam(':email', $email, PDO::PARAM_STR);
       $stmt->bindParam(':password', $passwordHashed, PDO::PARAM_STR);
+      $stmt->bindParam(':role_id', $role_id, PDO::PARAM_STR);
 
       if ($stmt->execute()) {
         // La consulta se ha ejecutado con éxito, muestra un mensaje de éxito
         $_SESSION['success'] = "El usuario se ha registrado con éxito.";
-        header("Location: login.php");
+          header("Location: ../auth/view/index.php");
       } else {
         // La consulta ha fallado, muestra un mensaje de error
         $_SESSION['error'] = "Ha ocurrido un error al registrar el usuario.";

@@ -5,6 +5,6 @@ return [
     'host' => 'localhost',
     'user' => 'root',
     'password' => '',
-    'dbname' => 'pwa'
+    'dbname' => 'ecommerce'
   ]
 ];

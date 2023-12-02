@@ -19,14 +19,14 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
       // La contraseña es correcta, inicia sesión y redirige al usuario a la página protegida
       session_start();
       $_SESSION['user'] = $user;
-      $userRole = $_SESSION['user']['role'];
-      echo json_encode(array('success' => true));
+      $userRole = $_SESSION['user']['role_id'];
       // Redirige al usuario a la página de inicio
-        if ($userRole === 'Admin') {
-          header("Location: /app/admin/modules/tasks/views/tasks_admin.php");
-        } else if ($userRole === 'User') {
-          header("Location: /app/admin/modules/tasks/views/tasks.php");
-        }
+      echo json_encode(array('success' => true));
+      if ($userRole === 1) {
+        header("Location: /e-commerce/admin/modules/products/views/products.php");
+      } else if ($userRole === 2) {
+        header("Location: /e-commerce/admin/modules/products/views/bib_librarian.php");
+      }
     } else {
       // La contraseña es incorrecta
       echo json_encode(array('success' => false, 'error' => 'Contraseña incorrecta'));
